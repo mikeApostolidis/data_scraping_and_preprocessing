@@ -1,6 +1,6 @@
 import pytest
 from selenium import webdriver
-import mysql.connector
+#import mysql.connector
 
 
 # @pytest.fixture()  # executes once before every test
@@ -33,17 +33,17 @@ def driver():
     my_driver.quit()
 
 
-@pytest.fixture()  # executes once before every test
-def connect_to_db():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="eanaplirotes",
-        password="eanaplirotes2023"
-    )
-    # Creating an instance of 'cursor' class
-    # which is used to execute the 'SQL'
-    # statements in 'Python'
-    print("Connected to database")
-    cursor = mydb.cursor()
-    yield cursor
+# @pytest.fixture()  # executes once before every test
+# def connect_to_db():
+#     mydb = mysql.connector.connect(
+#         host="localhost",
+#         user="eanaplirotes",
+#         password="eanaplirotes2023"
+#     )
+#     # Creating an instance of 'cursor' class
+#     # which is used to execute the 'SQL'
+#     # statements in 'Python'
+#     print("Connected to database")
+#     cursor = mydb.cursor()
+#     yield cursor
 

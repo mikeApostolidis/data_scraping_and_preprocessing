@@ -1,7 +1,7 @@
 import time
 
 import pytest
-from mysql.connector import cursor
+# from mysql.connector import cursor
 from selenium.common import StaleElementReferenceException
 from selenium.webdriver import ActionChains, Keys
 
@@ -26,9 +26,9 @@ class TestScrappingPage:
     # @pytest.mark.scrap
     def test_land_first_page(self, driver, connect_to_db):
         driver.get("https://www.minedu.gov.gr/")
-        connect_to_db.execute("SHOW TABLES")
-        for x in connect_to_db:
-            print(x)
+        # connect_to_db.execute("SHOW TABLES")
+        # for x in connect_to_db:
+        #     print(x)
 
     # @pytest.mark.scrap
     def test_navigate_to_page(self, driver):
@@ -36,7 +36,7 @@ class TestScrappingPage:
         print("navigated")
 
     @pytest.mark.scrap
-    def test_scrap(self, driver):
+    def test_scrap(driver):
         driver.get("https://www.minedu.gov.gr/")
 
 
@@ -92,18 +92,20 @@ class TestScrappingPage:
                             ["proslepseis", "genikes", "de"],
                             ["proslepseis", "genikes", "pe"],
                             ["proslepseis", "mousika"],
+                            ["edo"],
                         ]
-                        exclude_words = ["smeae", "eae"]
+
                         for link in xlsx_links:
                             link_text = link.text
 
                             normalized_into_english = normalize_greek_text(link_text)
+
                             normalized_final = normalized_into_english.replace('_', ' ')
+                            print(normalized_final)
 
                             # Check if the normalized text matches any desired pattern
                             for pattern in desired_patterns:
-                                if all(word in normalized_final for word in pattern) and all(
-                                        word not in link_text for word in exclude_words):
+                                if all(word in normalized_final for word in pattern):
                                     link.click() #downloads desired xlsx_link
 
                         # closes the new tab
