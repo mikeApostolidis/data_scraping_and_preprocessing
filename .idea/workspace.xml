@@ -5,18 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aeaadb8b-1fd8-4753-b1b5-addf273e6752" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ScrappingBot/src/db/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ScrappingBot/src/db/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ScrappingBot/src/driver/driver_module.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ScrappingBot/src/preprocess/preprocess_module.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ScrappingBot/src/scraper/scraper_module.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ScrappingBot/src/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScrappingBot/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScrappingBot/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ScrappingBot/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScrappingBot/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScrappingBot/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/tests/conftest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScrappingBot/tests/test_scrapping_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/tests/test_scrapping_files.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScrappingBot/src/db/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/src/db/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScrappingBot/src/driver/driver_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/src/driver/driver_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScrappingBot/src/preprocess/preprocess_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/src/preprocess/preprocess_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScrappingBot/src/scraper/scraper_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/src/scraper/scraper_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScrappingBot/src/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScrappingBot/src/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,10 +112,10 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DB_DATABASE" value="csv_db 8" />
+        <env name="DB_DATABASE" value="eanaplirotes" />
         <env name="DB_HOST" value="localhost" />
         <env name="DB_PASSWORD" value="" />
-        <env name="DB_PORT" value="3307" />
+        <env name="DB_PORT" value="3306" />
         <env name="DB_USER" value="root" />
       </envs>
       <option name="SDK_HOME" value="" />
@@ -135,22 +130,6 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for preprocess_module.test_add_hmeromhnia" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="data_scraping_and_preprocessing" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ScrappingBot/src/preprocess" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;preprocess_module.test_add_hmeromhnia&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="pytest for preprocess_module.test_create_sxoliko_etos" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
@@ -169,6 +148,22 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for preprocess_module.test_find_row_in_files" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="data_scraping_and_preprocessing" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ScrappingBot/src/preprocess" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;preprocess_module.test_find_row_in_files&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for preprocess_module.test_normalize_all_clomuns" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="data_scraping_and_preprocessing" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -182,6 +177,22 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;preprocess_module.test_normalize_all_clomuns&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for scraper_module.test_scraping3" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="data_scraping_and_preprocessing" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ScrappingBot/src/scraper" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;scraper_module.test_scraping3&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -206,16 +217,18 @@
       <item itemvalue="Python.main" />
       <item itemvalue="Python.config" />
       <item itemvalue="Python tests.scrap" />
-      <item itemvalue="Python tests.pytest for preprocess_module.test_add_hmeromhnia" />
       <item itemvalue="Python tests.pytest for preprocess_module.test_create_sxoliko_etos" />
+      <item itemvalue="Python tests.pytest for preprocess_module.test_find_row_in_files" />
       <item itemvalue="Python tests.pytest for preprocess_module.test_normalize_all_clomuns" />
+      <item itemvalue="Python tests.pytest for scraper_module.test_scraping3" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for preprocess_module.test_find_row_in_files" />
+        <item itemvalue="Python tests.pytest for scraper_module.test_scraping3" />
         <item itemvalue="Python.config" />
         <item itemvalue="Python tests.pytest for preprocess_module.test_normalize_all_clomuns" />
         <item itemvalue="Python tests.pytest for preprocess_module.test_create_sxoliko_etos" />
-        <item itemvalue="Python tests.pytest for preprocess_module.test_add_hmeromhnia" />
       </list>
     </recent_temporary>
   </component>

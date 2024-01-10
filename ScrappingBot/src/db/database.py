@@ -29,7 +29,7 @@ def execute_query(query):
 
 
 def get_max_date():
-    date = '2023-06-01'
+    date = '2018-01-23'
     connection = connect_to_db()
     cursor = connection.cursor()
 
@@ -48,3 +48,6 @@ def get_max_date():
     connection.close()
 
     return max_date, result
+
+
+# μειωμένου ωραρίου

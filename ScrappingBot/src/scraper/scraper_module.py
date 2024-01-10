@@ -1,6 +1,7 @@
 import os
 import shutil
 import time
+import traceback
 
 from selenium.common import StaleElementReferenceException, NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains, Keys
@@ -18,26 +19,45 @@ from datetime import datetime
 import ScrappingBot.src.settings as settings
 
 
+from selenium import webdriver
+
+
+
 def normalize_greek_text(text):
     # Normalize Greek text to English and convert to lowercase.
     return unidecode(text).lower()
 
 
 def locate_date_from_string_and_normalize_it(text):
-    # Define a regex pattern for the date in the format DD-MM-YY
-    date_pattern = r'\b\d{2}-\d{2}-\d{2}\b'
+    # Define a regex pattern for the date in the format DD-MM-YY or DD-MM-YYYY
+    date_pattern = r'\b\d{1,2}\s*-\s*\d{1,2}\s*-\s*\d{2,4}\b'
 
     # Find all occurrences of the pattern in the title
     matches = re.findall(date_pattern, text)
 
-    # Parse the input date string
-    parsed_date = datetime.strptime(matches[0], "%d-%m-%y")
+    if not matches:
+        print(f"No matches found for text: {text}")
+        return None
 
-    # Format the parsed date as "YYYY-MM-DD"
-    normalized_date = parsed_date.strftime("%Y-%m-%d")
+    try:
+        # Parse the input date string
+        date_str = matches[0]
+        date_parts = date_str.split('-')
 
-    return normalized_date
+        if len(date_parts[2]) == 2:
+            format_str = "%d-%m-%y"
+        else:
+            format_str = "%d-%m-%Y"
 
+        # Remove spaces and parse the date
+        date_str_no_space = '-'.join(date_parts).replace(' ', '')
+        parsed_date = datetime.strptime(date_str_no_space, format_str)
+
+        normalized_date = parsed_date.strftime("%Y-%m-%d")
+        return normalized_date
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 def is_file_downloaded(download_path, timeout=60):
     start_time = time.time()
@@ -79,12 +99,16 @@ def add_date_into_file_name(download_path, date_string, last_downloaded_file):
 def add_orario_into_file_name(download_path, orario_string, last_downloaded_file):
     # Get the filename without the path
     filename = os.path.basename(last_downloaded_file)
+    # print("filename: ", filename)
 
     # Construct the new filename using the provided date and the original filename
     new_filename = f"{orario_string}_{filename}"
+    print("orario string: ", orario_string)
+    # print("new filename: ", new_filename)
 
     # Construct the full path of the new file with the correct Excel extension
     new_filepath = os.path.join(download_path, new_filename)
+    # print("new filepath :", new_filepath)
 
     # Check if the source file exists before attempting to rename
     if not os.path.exists(last_downloaded_file):
@@ -121,12 +145,14 @@ def get_last_downloaded_file(download_path):
 
 def scrap(max_date):
     # Extract the date object from the result set
-    date_to_compare2 = max_date[0][0]
-    date_to_compare = "2023-09-01"
-    date_to_compare = datetime.strptime(date_to_compare, '%Y-%m-%d').date()
+    date_to_compare = max_date[0][0]
     print(date_to_compare)
+    date_to_compare2 = "2023-09-01"
+    # date_to_compare = datetime.strptime(max_date[0][0], '%Y-%m-%d').date()
+
     download_path = settings.folder_path
     global date_for_preprocess, orario_value
+    orario_value = None
     obj_date = None
 
     # Create the driver generator
@@ -138,6 +164,8 @@ def scrap(max_date):
     driver.get("https://www.minedu.gov.gr/")
 
     driver.find_element("xpath", '//*[@id="zentools-1085"]/ul/li/ul/li[6]/a').click()
+
+    # driver.get("https://www.minedu.gov.gr/news?start=3110")
 
     while True:
         current_url = driver.current_url
@@ -164,18 +192,27 @@ def scrap(max_date):
                 if "proslepseis" in proslipsis_key_word or "proslepse" in proslipsis_key_word:
                     print("clicked: ", a_tag_text)
                     date_for_preprocess = locate_date_from_string_and_normalize_it(a_tag_text)
-                    obj_date = datetime.strptime(date_for_preprocess, '%Y-%m-%d')
-                    obj_date = obj_date.date()
+                    print("normalized date:", date_for_preprocess)
+                    obj_date = datetime.strptime(date_for_preprocess, '%Y-%m-%d').date()
                     print("date object: ", obj_date)
+
                     # opens new window
+                    # Open the link in a new tab using the "send_keys" method with Keys.CONTROL + Keys.RETURN
+                    a_tag.send_keys(Keys.CONTROL + Keys.RETURN)
                     time.sleep(1)
-                    ActionChains(driver).move_to_element(a_tag).key_down(
-                        Keys.CONTROL
-                    ).click().key_up(Keys.CONTROL).perform()
-                    time.sleep(1)
+
+                    # Switch to the newly opened tab
                     driver.switch_to.window(driver.window_handles[1])
                     time.sleep(1)
-                    # print("anoikse allo parathiro kai kane focus ")
+
+                    # # opens new window
+                    # time.sleep(1)
+                    # ActionChains(driver).move_to_element(a_tag).key_down(
+                    #     Keys.CONTROL
+                    # ).click().key_up(Keys.CONTROL).perform()
+                    # time.sleep(1)
+                    # driver.switch_to.window(driver.window_handles[1])
+                    # time.sleep(1)
 
                     # Execute JavaScript to get the entire text content of the page
                     page_text = driver.execute_script("return document.body.innerText;")
@@ -183,51 +220,64 @@ def scrap(max_date):
                     normalized_page_text = normalize_greek_text(page_text)
 
                     # print(normalized_page_text)
+                    if "anaplerotes" in normalized_page_text or "anapliroton" in normalized_page_text or "anaplirotis"in normalized_page_text:
 
-                    # Check if the keyword is present in the normalized text
-                    if "plerous orariou" in normalized_page_text:
-                        orario_value = "ΑΠΩ"
-                        print("Keyword found on the page!", orario_value)
-                    else:
-                        print("Keyword not found on the page.")
-                    try:
-                        # download .xlsx files:
-                        xlsx_links_xpath = "//a[contains(@href, '.xlsx')]"
-
-                        # Find all <a> tags matching the XPath expression
-                        xlsx_links = wait.until(
-                            ec.presence_of_all_elements_located(
-                                (By.XPATH, xlsx_links_xpath)
-                            )
-                        )
-                        for link in xlsx_links:
-                            # stale element stin periptosei pou den vrei xlsx
-                            link.click()
-
-                            # Introduce a delay before renaming
-                            time.sleep(2)
-
-                            last_downloaded_file = get_last_downloaded_file(download_path)
+                        # Check if the keyword is present in the normalized text
+                        if "plerous orariou" in normalized_page_text:
+                            orario_value = "ΑΠΩ"
+                            print("Keyword found on the page!", orario_value)
+                        elif "meiomenou orariou" in normalized_page_text:
+                            orario_value = "ΑΜΩ"
+                            print("Keyword found on the page!", orario_value)
+                        else:
+                            print("Keyword not found on the page.")
+                        try:
+                            # download .xlsx files:
+                            xlsx_links_xpath = "//a[contains(@href, '.xlsx')]"
 
                             try:
-                                add_orario_into_file_name(download_path, orario_value, last_downloaded_file)
-                                orario_value = None
-                            except Exception as e:
-                                print("Somethings worng with add_orario_into_file_name: ", {e})
+                                xlsx_links = wait.until(
+                                    ec.presence_of_all_elements_located((By.XPATH, xlsx_links_xpath)))
+                            except StaleElementReferenceException:
+                                # Try locating the elements again
+                                xlsx_links = wait.until(
+                                    ec.presence_of_all_elements_located((By.XPATH, xlsx_links_xpath)))
+                            for link in xlsx_links:
+                                # Check if the element is interactable before clicking
+                                if link.is_displayed() and link.is_enabled():
+                                    link.click()
+                                    print("downloaded: ", link.text)
+                                else:
+                                    print("Element is not interactable:", link.text)
 
-                            last_downloaded_file = get_last_downloaded_file(download_path)
-                            add_date_into_file_name(download_path, date_for_preprocess, last_downloaded_file)
+                                # Introduce a delay before renaming
+                                time.sleep(2)
+
+                                last_downloaded_file = get_last_downloaded_file(download_path)
+
+                                try:
+                                    add_orario_into_file_name(download_path, orario_value, last_downloaded_file)
+                                    orario_value = None
+                                except Exception as e:
+                                    print("Somethings wrong with add_orario_into_file_name: ", {e})
+
+                                last_downloaded_file = get_last_downloaded_file(download_path)
+                                add_date_into_file_name(download_path, date_for_preprocess, last_downloaded_file)
+                            driver.close()
+                            driver.switch_to.window(driver.window_handles[0])
+                            # timeout exception
+                        except TimeoutException as e:
+                            driver.close()
+                            driver.switch_to.window(driver.window_handles[0])
+                            print("TimeoutException with finding excel files:", {e})
+                        except Exception as e:
+                            driver.close()
+                            driver.switch_to.window(driver.window_handles[0])
+                            print("Something is wrong with not finding excel files:", {e})
+                            traceback.print_exc()
+                    else:
                         driver.close()
                         driver.switch_to.window(driver.window_handles[0])
-                        # timeout exception
-                    except TimeoutException as e:
-                        driver.close()
-                        driver.switch_to.window(driver.window_handles[0])
-                        print("TimeoutException with finding excel files:", {e})
-                    except Exception as e:
-                        driver.close()
-                        driver.switch_to.window(driver.window_handles[0])
-                        print("Something is wrong with not finding excel files:", {e})
 
                     # desired_patterns = [
                     #     ["proslepseis", "genikes", "de"],
@@ -235,31 +285,33 @@ def scrap(max_date):
                     #     ["proslepseis", "mousika"],
                     #     ["edo"],
                     # ]
-
-                if obj_date == date_to_compare:
-                    print("eftasa!")
-                    driver.quit()
-
             except StaleElementReferenceException as e:
                 print("Stale element reference; element is no longer valid", e)
+                traceback.print_exc()
 
-        else:
-            try:
-                next_page_link = driver.find_element(
-                    By.PARTIAL_LINK_TEXT, "Επόμενο"
-                )
+        if obj_date == date_to_compare:
+            print("eftasa!")
+            # breaks to driver.quit
+            break
 
-                next_page_link.click()
+        # 'else' block belongs to the 'for' loop
+        try:
+            next_page_link = driver.find_element(
+                By.XPATH, '//*[@id="adminForm"]/div/ul/li[13]/a'
+            )
+            next_page_link.click()
+            wait.until(ec.url_changes(current_url))
+            next_url = driver.current_url
 
-                wait.until(ec.url_changes(current_url))
+            if current_url == next_url:
+                raise TimeoutException("No 'Epomeno' link found; end of pages reached")
 
-                next_url = driver.current_url
+        except TimeoutException as e:
+            print(e)
+            # If 'Epomeno' link is not found, exit the loop and quit the driver
+            # breaks to driver.quit
+            break
 
-                if current_url == next_url:
-                    raise Exception
-            except Exception as e:
-                print(
-                    "No 'Epomeno' link found; end of pages reached, now Exiting",
-                    e,
-                )
-                driver.quit()
+    print("Now exiting...")
+    driver.quit()
+
