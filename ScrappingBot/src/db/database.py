@@ -14,8 +14,19 @@ def connect_to_db():
     )
 
 
+# Create a connection pool
+connection_pool = mysql.connector.pooling.MySQLConnectionPool(
+    pool_name="my_pool",
+    pool_size=5,
+    **DATABASE_CONFIG
+)
+
+
 def execute_query(query):
-    connection = connect_to_db()
+
+    # connection = connect_to_db()
+
+    connection = connection_pool.get_connection()
     cursor = connection.cursor()
 
     cursor.execute(query)
@@ -29,14 +40,12 @@ def execute_query(query):
 
 
 def get_max_date():
-    date = '2018-01-23'
-    connection = connect_to_db()
+    # date = '2018-01-12'
+    # connection = connect_to_db()
+    connection = connection_pool.get_connection()
     cursor = connection.cursor()
 
-
-    # query = "SELECT MAX(Hmeromnia) FROM anaplirotes ;"
-    # query = f"SELECT * FROM anaplirotes WHERE Hmeromnia = '{date}';"
-    query = f"SELECT Hmeromnia FROM anaplirotes WHERE Hmeromnia = '{date}';"
+    query = "SELECT MAX(Hmeromnia) FROM anaplirotes ;"
 
     cursor.execute(query)
     result = cursor.fetchall()
@@ -47,7 +56,4 @@ def get_max_date():
     cursor.close()
     connection.close()
 
-    return max_date, result
-
-
-# μειωμένου ωραρίου
+    return max_date
